@@ -8,8 +8,7 @@ const DefaultSchema = Schema(
             ru: { type: String, required: true },
             en: { type: String, required: true },
         },
-        audio_file: { type: String, required: true },
-        audio_image: { type: String, required: true },
+        audio: [{ type: String, required: true }],
         audio_time: { type: String, required: true },
     },
     {

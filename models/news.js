@@ -28,6 +28,7 @@ const DefaultSchema = Schema(
         dislike: { type: Number, default: 0 },
         view: { type: Number, default: 0 },
         author_name: { type: String, required: true },
+        images: [{ type: String, required: true }],
         favoutite_press: {
             type: Number,
             default: 0,

@@ -2,7 +2,7 @@ const { Schema, model } = require("mongoose");
 
 const DefaultSchema = Schema(
     {
-        image: { type: String, required: true },
+        image: [{ type: String, required: true }],
     },
     {
         timestamps: true,
