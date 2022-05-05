@@ -2,33 +2,34 @@ const { Schema, model } = require("mongoose");
 
 const DefaultSchema = Schema(
     {
-        category_ID: { type: Schema.ObjectId, ref: "category", required: true },
-        tag_ID: { type: Schema.ObjectId, ref: "tag", required: true },
+        category_ID: [{ type: Schema.ObjectId, ref: "category", }],
+        tag_ID: [{ type: Schema.ObjectId, ref: "tag", }],
         name: {
-            uz: { type: String, required: true },
-            ru: { type: String, required: true },
-            en: { type: String, required: true },
+            uz: { type: String },
+            ru: { type: String },
+            en: { type: String },
         },
         description: {
-            uz: { type: String, required: true },
-            ru: { type: String, required: true },
-            en: { type: String, required: true },
+            uz: { type: String, },
+            ru: { type: String, },
+            en: { type: String, },
         },
         sitata: {
-            uz: { type: String, required: true },
-            ru: { type: String, required: true },
-            en: { type: String, required: true },
+            uz: { type: String, },
+            ru: { type: String, },
+            en: { type: String, },
         },
         link: {
-            telegram: { type: String, required: true },
-            facebook: { type: String, required: true },
-            instagram: { type: String, required: true },
+            telegram: { type: String, },
+            facebook: { type: String, },
+            instagram: { type: String, },
         },
         like: { type: Number, default: 0 },
         dislike: { type: Number, default: 0 },
         view: { type: Number, default: 0 },
-        author_name: { type: String, required: true },
-        images: [{ type: String, required: true }],
+        rating: { type: Number, default: 0 },
+        author_name: { type: String, },
+        images: [{ type: String,  }],
         favoutite_press: {
             type: Number,
             default: 0,
@@ -38,7 +39,6 @@ const DefaultSchema = Schema(
             enum: [
                 "none", "recommend", "most-read"
             ],
-            default: "none"
         }
     },
     {

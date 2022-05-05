@@ -34,7 +34,7 @@ app.use(
   })
 );
 
-require("./database/db");
+require("./database/db")
 
 
 app.use(expressLayouts);
@@ -46,6 +46,14 @@ app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 
+
+
+// Frontend API
+app.use('/admin', require('./page/admin/index'))
+app.use('/auth', require('./page/auth/index'))
+
+
+// Backend API
 app.use("/user", require("./router/userRoutor"))
 app.use("/tag", require("./router/tagRouter"))
 app.use("/category", require("./router/categoryRouter"))
@@ -54,6 +62,9 @@ app.use("/comment", require("./router/commentRouter"))
 app.use("/reply", require("./router/commentRouter"))
 app.use("/advertisement", require("./router/advertisementRouter"))
 app.use("/audio", require("./router/audioRouter"))
+app.use("/contact", require("./router/contactRouter"))
+app.use("/news", require("./router/newRouter"))
+app.use("/rating", require("./router/ratingRouter"))
 
 
 

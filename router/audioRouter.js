@@ -18,5 +18,7 @@ const uploads = multer({ storage: storage });
 routor.post("/create", uploads.array("audio", 12), audioController.createData);
 routor.get("/all", audioController.getAllData);
 routor.get("/:id", audioController.getOneData);
+routor.put("/:id", uploads.array("audio", 12), audioController.updateOne);
+routor.delete("/:id", audioController.deleteAudio);
 
 module.exports = routor;

@@ -36,16 +36,15 @@ module.exports = class CRUD_system {
         const fielpath = this.filepath
         const defaultBody = req.body;
         
-        const arrayFiles = [];
+
         const allFiles = req.files;
+        const arrayFiles = [];
+        
         for (let item of allFiles) {
             const { filename } = item;
             arrayFiles.push(filename);
         }
-        const result = await MODEL.create({ 
-            ...defaultBody, 
-            [fielpath]: arrayFiles
-         });
+        const result = await MODEL.create({ ...defaultBody, [fielpath]: arrayFiles  });
         await result
             .save()
             .then(() => {

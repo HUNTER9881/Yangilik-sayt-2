@@ -58,7 +58,7 @@ module.exports = {
 
 
     // alohida malumotni o'chirish uchun callback 
-    deleteOneDataSuccess: function (item) {
+    deleteOneDataSuccess: function () {
         return ({
             message: "Successfully delete data",
             data: [],
@@ -68,6 +68,18 @@ module.exports = {
         return ({
             message: "Error delete data",
             data:item,
+        })
+    },
+
+    // tekshirish uchun
+    checkError: function () {
+        return ({
+            message: "Please fill the chack",
+        })
+    },
+    statusError: function () {
+        return ({
+            message: "Please fill the status",
         })
     },
 }

@@ -16,7 +16,11 @@ const storage = multer.diskStorage({
 const uploads = multer({ storage: storage })
 
 
-routor.post("/create", uploads.array("image", 12), advertisementController.createData)
+routor.post("/create", uploads.array("IMAGES", 12), advertisementController.createData)
+routor.get("/all", advertisementController.getAllData);
+routor.get("/:id", advertisementController.getOneData);
+routor.put("/:id", uploads.array("IMAGES", 12), advertisementController.updateOne);
+routor.delete("/:id", advertisementController.deleteOne);
 
 
 module.exports = routor
