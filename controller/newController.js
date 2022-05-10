@@ -32,15 +32,15 @@ exports.createData = async (req, res, next) => {
   let category_IDs = [];
   let category = req.body.CATEGORY_ID;
   for (let item of category) {
-    let { values } = item;
-    category_IDs.push(item);
+    let values = item;
+    category_IDs.push(values);
   }
 
   let tag_IDs = [];
   let tag = req.body.TAG_ID;
   for (let item of tag) {
-    let { values } = item;
-    tag_IDs.push(item);
+    let values = item;
+    tag_IDs.push(values);
   }
 
   const result = new NewsModel({
@@ -81,7 +81,7 @@ exports.createData = async (req, res, next) => {
 };
 
 exports.getAll = async (req, res, next) => {
-  await NewsModel.find().exec((error, data) => {
+  await NewsModel.find().populate(['category_ID', 'tag_ID']).sort({ createdAt: -1 }).exec((error, data) => {
     if (error) res.json(callback.getAllDataError(error));
     else {
       res.json(callback.getAllDataSuccess(data));
@@ -90,12 +90,29 @@ exports.getAll = async (req, res, next) => {
 };
 
 exports.getOne = async (req, res, next) => {
-  await NewsModel.findById(req.params.id).exec((error, data) => {
+
+
+
+
+  await NewsModel.findById(req.params.id).populate(['category_ID', 'tag_ID']).exec(async (error, data) => {
     if (error) res.json(callback.getOneDataError(error));
     else {
+
+
+      const updateView = await NewsModel.findByIdAndUpdate(req.params.id)
+      updateView.view = updateView.view += 1
+      updateView.save()
+
+
+
+
+
       res.json(callback.getOneDataSuccess(data));
     }
   });
+
+
+
 };
 
 exports.updateData = async (req, res, next) => {
@@ -118,7 +135,8 @@ exports.updateData = async (req, res, next) => {
 
   if (!check) {
     res.json(callback.checkError());
-  } else if (check == "image") {
+  }
+  else if (check == "rasm_tahrirlash") {
     // eski rasmni ochirish
     const result = await NewsModel.findById({ _id: id }).select("images");
     const IMAGES = result.images; // []
@@ -160,59 +178,36 @@ exports.updateData = async (req, res, next) => {
             sitataen,
           } = req.body;
           data.name.uz = nameuz;
-          data.name.uz = nameru;
-          data.name.uz = nameen;
+          data.name.ru = nameru;
+          data.name.en = nameen;
           data.description.uz = descriptionuz;
-          data.description.uz = descriptionru;
-          data.description.uz = descriptionen;
+          data.description.ru = descriptionru;
+          data.description.en = descriptionen;
           data.sitata.uz = sitatauz;
-          data.sitata.uz = sitataru;
-          data.sitata.uz = sitataen;
+          data.sitata.ru = sitataru;
+          data.sitata.en = sitataen;
           saveData(data);
         }
 
         // faqat kategoruyani tahrrilash
-        if (check == "category") {
-          const category_ID = [];
-          for (const item of req.body.category_ID) {
-            const values = item;
-            category_ID.push(values);
-          }
-          data.category_ID = category_ID;
-          saveData(data);
-        }
-
-        // faqat tag tahrrilash
-        if (check == "tag") {
+        if (check == "category_tag") {
           const tag_ID = [];
           for (const item of req.body.tag_ID) {
             const values = item;
             tag_ID.push(values);
           }
+
+          const category_ID = [];
+          for (const item of req.body.category_ID) {
+            const values = item;
+            category_ID.push(values);
+          }
+
+          data.category_ID = category_ID;
           data.tag_ID = tag_ID;
           saveData(data);
         }
 
-        // faqat status tahrrilash
-        if (check == "status") {
-          const { status } = req.body;
-          if (!status) {
-            res.json(callback.statusError());
-          } else {
-            if (status == "1") {
-              data.status = "none";
-              saveData(data);
-            }
-            if (status == "2") {
-              data.status = "recommend";
-              saveData(data);
-            }
-            if (status == "3") {
-              data.status = "most-read";
-              saveData(data);
-            }
-          }
-        }
 
         // faqat like ni tahrrilash
         if (check == "like") {

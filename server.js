@@ -5,6 +5,7 @@ const cors = require('cors')
 const expressLayouts = require('express-ejs-layouts')
 const { port } = require("./config/index");
 const cookieParser = require("cookie-parser");
+const i18n = require("i18n-express");
 
 
 const {
@@ -34,6 +35,16 @@ app.use(
   })
 );
 
+
+app.use(i18n({
+  translationsPath: path.join(__dirname, 'i18n'), // <--- use here. Specify translations files path.
+  siteLangs: ["uz","ru", "en"],
+  textsVarName: 'TARJIMA'
+}));
+
+
+
+
 require("./database/db")
 
 
@@ -49,6 +60,7 @@ app.use(cors());
 
 
 // Frontend API
+app.use('/', require('./page/client/index'))
 app.use('/admin', require('./page/admin/index'))
 app.use('/auth', require('./page/auth/index'))
 
@@ -65,6 +77,7 @@ app.use("/audio", require("./router/audioRouter"))
 app.use("/contact", require("./router/contactRouter"))
 app.use("/news", require("./router/newRouter"))
 app.use("/rating", require("./router/ratingRouter"))
+app.use("/main", require("./router/mainRouter"))
 
 
 

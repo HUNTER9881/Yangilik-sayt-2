@@ -5,6 +5,7 @@ const commentController = require("../controller/commentController")
 routor.post("/create", commentController.createData)
 routor.get("/all", commentController.getAllData)
 routor.get("/:id", commentController.getOneData)
+routor.get("/filter/:id", commentController.filterComment)
 routor.delete("/:id", commentController.deleteOneData)
 
 

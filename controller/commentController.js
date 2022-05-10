@@ -1,4 +1,4 @@
-const CommentModel = require("../models/category");
+const CommentModel = require("../models/comment");
 const CRUD_system = require("../config/crud");
 
 exports.createData = async (req, res, next) => {
@@ -19,4 +19,10 @@ exports.getOneData = async (req, res, next) => {
 exports.deleteOneData = async (req, res, next) => {
     const result = new CRUD_system(CommentModel, req, res, next);
     result.DELETE_ONE_without_FILE()
+};
+
+
+exports.filterComment = async (req, res, next) => {
+    const result = await CommentModel.find({news_ID: req.params.id}).sort({createdAt: -1})
+    res.json(result)
 };

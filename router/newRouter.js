@@ -11,7 +11,7 @@ const storage = multer.diskStorage({
     },
     filename: function (req, file, callback) {
         callback(null, `${md5(Date.now())}${path.extname(file.originalname)}`);
-    },
+    },  
 });
 const uploads = multer({ storage: storage });
 

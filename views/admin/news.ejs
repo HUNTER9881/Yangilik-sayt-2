@@ -68,7 +68,6 @@
                     <label class="col-sm-12 col-form-label">Kategoriyani tanlash</label>
                     <div class="col-sm-12">
                         <select class="form-control categoryAll" id="categoryID" size="5" multiple="multiple">
-
                         </select>
                     </div>
                 </div>
@@ -216,20 +215,74 @@
         </div>
     </div>
 </div>
-<!-- Yangilikni tahrirlash -->
-<div class="modal fade" id="UPDATE_DATA" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+
+
+
+<!-- RASMNI tahrirlash -->
+<div class="modal fade" id="IMAGE_UPDATE" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title mt-0" id="myLargeModalLabel">
-                    Informatsiya
+                    Rasmni tahrirlash
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body"></div>
+            <div class="modal-body ImageUpdateData"></div>
+        </div>
+    </div>
+</div>
+
+<!-- CONTENT tahrirlash -->
+<div class="modal fade" id="CONTENT_UPDATE" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myLargeModalLabel">
+                    Contentni tahrirlash
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body ContentUpdateData"></div>
+        </div>
+    </div>
+</div>
+<!-- CATEGORY_TAG tahrirlash -->
+<div class="modal fade" id="CATEGORY_TAG" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myLargeModalLabel">
+                    Kategoriya va Tag tahrirlash
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body CategoryTagUpdateData"></div>
+        </div>
+    </div>
+</div>
+<!-- STATUS tahrirlash -->
+<div class="modal fade" id="STATUS" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mt-0" id="myLargeModalLabel">
+                    Status tahrirlash
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body StatusUpdateData"></div>
         </div>
     </div>
 </div>
@@ -244,26 +297,34 @@
     // Hamma yangiliklarni olish
     axios.get("/news/all").then(async (res) => {
         const DATA = res.data.data;
+        console.log(DATA)
         const getTable = $(".getTable");
         await getTable.html("");
         DATA.forEach((item, index, array) => {
             getTable.append(`
-            <tr>
-                <td>
-                    <img src="/news/${item.images[0]}" style="width: 100px;" alt="">
-                </td>
-                <td>${item.name.uz}</td>
-                <td>${new Date(item.createdAt).toLocaleString()}</td>
-                <td>
-                    <button type="button" onclick="updateData('${item._id}')"data-toggle="modal" data-target="#updateModal" class="btn btn-success">Info</button>
-                    <button type="button" onclick="updateData('${item._id}')"data-toggle="modal" data-target="#updateModal" class="btn btn-success">Edit</button>
-                    <button type="button" onclick="deleteData('${item._id}')" class="btn btn-danger">Delete</button>
-                </td>
-            </tr>
-        `);
+                <tr>
+                    <td>
+                        <img src="/news/${item.images[0]}" style="width: 100px;" alt="">
+                    </td>
+                    <td>${item.name.uz}</td>
+                    <td>${new Date(item.createdAt).toLocaleString()}</td>
+                    <td>
+                        <button type="button" onclick="IMAGE_UPDATE('${item._id}')"data-toggle="modal" data-target="#IMAGE_UPDATE" class="btn btn-warning">Image</button>
+                        <button type="button" onclick="CONTENT_UPDATE('${item._id}')"data-toggle="modal" data-target="#CONTENT_UPDATE" class="btn btn-warning">Content</button>
+                        <button type="button" onclick="CATEGORY_TAG('${item._id}')"data-toggle="modal" data-target="#CATEGORY_TAG" class="btn btn-warning">Category / Tag</button>
+                        <button type="button" onclick="deleteData('${item._id}')" class="btn btn-danger">Delete</button>
+                    </td>
+                </tr>
+            `);
+
+
+
+
+
+
+
         });
     })
-
     // Hamma kategoriyani olish
     axios.get('/category/all').then(async (res) => {
         const DATA = res.data.data
@@ -284,35 +345,8 @@
     })
 
 
-
     // Malumot yaratish
     const CREADDATA = () => {
-
-        // 1.Kategoriyani massivga olish
-        const categoryID = document.getElementById("categoryID")
-        // let selectCategory = new Array();
-        // let categoryCount = 0;
-        // for (let i = 0; i < categoryID.length; i++) {
-        //     if (categoryID.options[i].selected) {
-        //         selectCategory[categoryCount] = categoryID.options[i].value;
-        //         categoryCount++;
-        //     }
-        // }
-
-        // // 2.Taglarni massivga olish
-        const tagID = document.getElementById("tagID")
-        // let selectTag = new Array();
-        // let tagCount = 0;
-        // for (let i = 0; i < tagID.length; i++) {
-        //     if (tagID.options[i].selected) {
-        //         selectTag[tagCount] = tagID.options[i].value;
-        //         tagCount++;
-        //     }
-        // }
-
-        const selectCategory = Array.from(categoryID.options).filter(option => option.selected).map(option => option.value)
-        const selectTag = Array.from(tagID.options).filter(option => option.selected).map(option => option.value)
-
         const formData = new FormData()
 
         const image0 = document.getElementById('image').files[0]
@@ -327,6 +361,9 @@
         const image9 = document.getElementById('image').files[9]
         const image10 = document.getElementById('image').files[10]
         const image11 = document.getElementById('image').files[11]
+
+        const categoryID = document.getElementById("categoryID")
+        const tagID = document.getElementById("tagID")
 
         const nameuz = document.getElementById('nameuz').value
         const nameru = document.getElementById('nameru').value
@@ -343,8 +380,28 @@
         const authorname = document.getElementById('authorname').value
         const status = document.getElementById('status').value
 
-        formData.append("CATEGORY_ID[]", selectCategory)
-        formData.append("TAG_ID[]", selectTag)
+        const CATEGOTY_ARRAY = []
+        for (let item of categoryID) {
+            if (item.selected) {
+                CATEGOTY_ARRAY.push(item.value)
+            }
+        }
+        for (let i = 0; i < CATEGOTY_ARRAY.length; i++) {
+            formData.append('CATEGORY_ID[]', CATEGOTY_ARRAY[i]);
+        }
+
+
+
+        const TAG_ARRAY = []
+        for (let item of tagID) {
+            if (item.selected) {
+                TAG_ARRAY.push(item.value)
+            }
+        }
+        for (let i = 0; i < TAG_ARRAY.length; i++) {
+            formData.append('TAG_ID[]', TAG_ARRAY[i]);
+        }
+
         formData.append("NAME_UZ", nameuz)
         formData.append("NAME_RU", nameru)
         formData.append("NAME_EN", nameen)
@@ -400,35 +457,295 @@
                 }
             })
                 .then((res) => {
-                    // window.location.reload()
-                    console.log(res.data)
+                    window.location.reload()
+                });
+        }
+    }
+
+
+    // Rasmni tahrirlash
+    function IMAGE_UPDATE(id) {
+        axios.get(`/news/${id}`).then(async (res) => {
+            const DATA = res.data.data
+            console.log(DATA)
+            const ImageUpdateData = $(".ImageUpdateData")
+            await ImageUpdateData.html("")
+            ImageUpdateData.append(`
+                    <div class="form-group row">
+                        <label for="example-text-input-lg" class="col-sm-12 col-form-label">Yangi rasmni qo'shing</label>
+                        <div class="col-lg-12">
+                            <input id="IMAGE_updates" class="form-control form-control-lg" type="file" multiple />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-12">
+                            <button class="btn btn-success" onclick="update_mage_function('${DATA._id}')" type="button">
+                                Rasmni tahrirlash
+                            </button>
+                        </div>
+                    </div>
+            `)
+        })
+    }
+    function update_mage_function(id) {
+        const formData = new FormData()
+
+        const image0 = document.getElementById('IMAGE_updates').files[0]
+        const image1 = document.getElementById('IMAGE_updates').files[1]
+        const image2 = document.getElementById('IMAGE_updates').files[2]
+        const image3 = document.getElementById('IMAGE_updates').files[3]
+        const image4 = document.getElementById('IMAGE_updates').files[4]
+        const image5 = document.getElementById('IMAGE_updates').files[5]
+        const image6 = document.getElementById('IMAGE_updates').files[6]
+        const image7 = document.getElementById('IMAGE_updates').files[7]
+        const image8 = document.getElementById('IMAGE_updates').files[8]
+        const image9 = document.getElementById('IMAGE_updates').files[9]
+        const image10 = document.getElementById('IMAGE_updates').files[10]
+        const image11 = document.getElementById('IMAGE_updates').files[11]
+
+        formData.append("images", image0)
+        formData.append("images", image1)
+        formData.append("images", image2)
+        formData.append("images", image3)
+        formData.append("images", image4)
+        formData.append("images", image5)
+        formData.append("images", image6)
+        formData.append("images", image7)
+        formData.append("images", image8)
+        formData.append("images", image9)
+        formData.append("images", image10)
+        formData.append("images", image11)
+        formData.append("check", "rasm_tahrirlash")
+
+
+        if (
+            image0 == ""
+        ) {
+            alert("Hammasini kirit")
+        } else {
+            axios({
+                method: "PUT",
+                url: `/news/${id}`,
+                data: formData,
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+                .then((res) => {
+                    window.location.reload()
                 });
         }
 
 
 
-
-
-
-
-
-
-
-
-
     }
 
 
+    // Contentni tahrirlash
+    function CONTENT_UPDATE(id) {
+        axios.get(`/news/${id}`).then(async (res) => {
+            const DATA = res.data.data
+            const ContentUpdateData = $(".ContentUpdateData")
+            await ContentUpdateData.html("")
+            ContentUpdateData.append(`
+
+                <div class="form-group row">
+                    <label for="example-text-input-lg" class="col-sm-12 col-form-label">Name uz</label>
+                    <div class="col-lg-12">
+                        <input id="nameuz_updates" value="${DATA.name.uz}" class="form-control form-control-lg" type="text" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="example-text-input-lg" class="col-sm-12 col-form-label">Name ru</label>
+                    <div class="col-lg-12">
+                        <input id="nameru_updates" value="${DATA.name.ru}" class="form-control form-control-lg" type="text" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="example-text-input-lg" class="col-sm-12 col-form-label">Name en</label>
+                    <div class="col-lg-12">
+                        <input id="nameen_updates"  value="${DATA.name.en}" class="form-control form-control-lg" type="text" />
+                    </div>
+                </div>
+                
+                <div class="form-group row">
+                    <label for="example-text-input-lg" class="col-sm-12 col-form-label">Description uz</label>
+                    <div class="col-lg-12">
+                        <textarea id="descriptionuz_updates" class="form-control form-control-lg" rows="10"
+                            cols="10"> ${DATA.description.uz} </textarea>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="example-text-input-lg" class="col-sm-12 col-form-label">Description ru</label>
+                    <div class="col-lg-12">
+                        <textarea id="descriptionru_updates" class="form-control form-control-lg" rows="10"
+                            cols="10">  ${DATA.description.ru}</textarea>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="example-text-input-lg" class="col-sm-12 col-form-label">Description en</label>
+                    <div class="col-lg-12">
+                        <textarea id="descriptionen_updates" class="form-control form-control-lg" rows="10"
+                            cols="10"> ${DATA.description.en}</textarea>
+                    </div>
+                </div>
 
 
+                <div class="form-group row">
+                    <label for="example-text-input-lg" class="col-sm-12 col-form-label">Sitata uz</label>
+                    <div class="col-lg-12">
+                        <textarea id="sitatatuz_updates" class="form-control form-control-lg" rows="10" cols="10">${DATA.sitata.uz} </textarea>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="example-text-input-lg" class="col-sm-12 col-form-label">Sitata ru</label>
+                    <div class="col-lg-12">
+                        <textarea id="sitatatru_updates" class="form-control form-control-lg" rows="10" cols="10">${DATA.sitata.ru} </textarea>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="example-text-input-lg" class="col-sm-12 col-form-label">Sitata en</label>
+                    <div class="col-lg-12">
+                        <textarea id="sitataten_updates" class="form-control form-control-lg" rows="10" cols="10">${DATA.sitata.en} </textarea>
+                    </div>
+                </div>
 
-    const deleteData = (id) => {
-        axios.delete(`/news/${id}`).then((res) => {
+                <div class="form-group row">
+                    <div class="col-lg-12">
+                        <button class="btn btn-success" onclick="update_content_function('${DATA._id}')" type="button">
+                            Rasmni tahrirlash
+                        </button>
+                    </div>
+                </div>
+            `)
+        })
+    }
+    const update_content_function = (id) => {
+        const nameuz_updates = document.getElementById('nameuz_updates').value
+        const nameru_updates = document.getElementById('nameru_updates').value
+        const nameen_updates = document.getElementById('nameen_updates').value
+        const descriptionuz_updates = document.getElementById('descriptionuz_updates').value
+        const descriptionru_updates = document.getElementById('descriptionru_updates').value
+        const descriptionen_updates = document.getElementById('descriptionen_updates').value
+        const sitatatuz_updates = document.getElementById('sitatatuz_updates').value
+        const sitatatru_updates = document.getElementById('sitatatru_updates').value
+        const sitataten_updates = document.getElementById('sitataten_updates').value
+
+        axios.put(`/news/${id}`, {
+            nameuz: nameuz_updates,
+            nameru: nameru_updates,
+            nameen: nameen_updates,
+            descriptionuz: descriptionuz_updates,
+            descriptionru: descriptionru_updates,
+            descriptionen: descriptionen_updates,
+            sitatauz: sitatatuz_updates,
+            sitataru: sitatatru_updates,
+            sitataen: sitataten_updates,
+            check: "content"
+        }).then((res) => {
             window.location.reload()
         })
     }
 
 
+    // Categoruya va tag tahrirlash
+    function CATEGORY_TAG(id) {
+        axios.get(`/news/${id}`).then(async (res) => {
+            const DATA = res.data.data
+            console.log(DATA)
+            const CategoryTagUpdateData = $(".CategoryTagUpdateData")
+            await CategoryTagUpdateData.html("")
+            CategoryTagUpdateData.append(`
 
+                <div class="form-group row">
+                    <label class="col-sm-12 col-form-label">Kategoriyani tanlash</label>
+                    <div class="col-sm-12">
+                        <select class="form-control categoryAllsss" id="categoryID_updates" size="5" multiple="multiple">
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-12 col-form-label">Tag tanlash</label>
+                    <div class="col-sm-12">
+                        <select class="form-control tagAllsss" id="tagID_updates" size="5" multiple="multiple"> </select>
+                    </div>
+                </div>
+
+
+                   
+                <div class="form-group row">
+                    <div class="col-lg-12">
+                        <button class="btn btn-success" onclick="update_tag_category_function('${DATA._id}')" type="button">
+                            Rasmni tahrirlash
+                        </button>
+                    </div>
+                </div>
+            `)
+
+            // Hamma kategoriyani olish
+            axios.get('/category/all').then(async (res) => {
+                const CATEGORY = res.data.data
+                const category = $("#categoryID_updates")
+                await category.html("")
+                CATEGORY.forEach((item, index, array) => {
+                    category.append(`<option value="${item._id}">${item.name.uz}</option> `)
+                });
+            })
+            // Hamma tag olish
+            axios.get('/tag/all').then(async (res) => {
+                const TAGS = res.data.data
+                const tagAll = $("#tagID_updates")
+                await tagAll.html("")
+                TAGS.forEach((item, index, array) => {
+                    tagAll.append(`<option value="${item._id}">${item.name.uz}</option> `)
+                });
+            })
+
+        })
+
+
+
+    }
+    function update_tag_category_function(id) {
+        const CATEGORY = document.getElementById('categoryID_updates')
+        const TAG = document.getElementById('tagID_updates')
+
+        const CATEGOTY_ARRAY = []
+        for (let item of CATEGORY) {
+            if (item.selected) {
+                CATEGOTY_ARRAY.push(item.value)
+            }
+        }
+        const TAG_ARRAY = []
+        for (let item of TAG) {
+            if (item.selected) {
+                TAG_ARRAY.push(item.value)
+            }
+        }
+
+        axios.put(`/news/${id}`, {
+            tag_ID: TAG_ARRAY,
+            category_ID: CATEGOTY_ARRAY,
+            check: "category_tag"
+        })
+            .then((res) => {
+                window.location.reload()
+            })
+
+
+
+
+    }
+
+
+
+
+    // malumot o'chirish
+    const deleteData = (id) => {
+        axios.delete(`/news/${id}`).then((res) => {
+            window.location.reload()
+        })
+    }
 
 </script>
