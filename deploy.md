@@ -1,8 +1,14 @@
-Kirish uchun
+## DigitalOcean ga kirish uchun
+login: nodejs_shahriyor@mail.ru
+password: 124536798assaassa
 
-	login: ssh root@188.166.92.179
-	password: 124536798assaAAA
-	name: yangilik24uzbekistan
+
+
+## Serverga kirish uchun
+
+login: ssh root@188.166.92.179
+password: 124536798assaAAA
+name: yangilik24uzbekistan
 
 
 
