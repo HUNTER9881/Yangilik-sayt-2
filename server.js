@@ -80,7 +80,10 @@ app.use("/rating", require("./router/ratingRouter"))
 app.use("/main", require("./router/mainRouter"))
 
 
-console.log("Hello Server")
+setInterval(() => {
+  console.log("Hello Server")
+}, 2000)
+
 
 
 app.listen(port, () => {
