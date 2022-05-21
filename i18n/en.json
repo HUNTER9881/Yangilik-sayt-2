@@ -1,4 +1,12 @@
 {
     "name": "Heelloo",
-    "car": "asasa"
+    "news" : "News",
+    "Fashion": "Fashion",
+    "Politics": "Politics",
+    "Sport": "Sport",
+    "Videos": "Videos"
+    
+   
 }
+
+

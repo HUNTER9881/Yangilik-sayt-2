@@ -80,7 +80,7 @@ app.use("/rating", require("./router/ratingRouter"))
 app.use("/main", require("./router/mainRouter"))
 
 
-
+console.log("Hello Server")
 
 
 app.listen(port, () => {
